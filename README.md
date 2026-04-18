@@ -1,6 +1,11 @@
-# K95 Controller (C# Version)
+# Corsair K95 Controller (C#)
 
-Este projeto é uma réplica em C# do controlador HID para o teclado Corsair K95, originalmente escrito em Rust.
+![](assets/k95_csharp.png)
+
+Este projeto é um controlador HID para o teclado Corsair K95
+
+![Corsair K95](assets/k95_rgb_xt_front.avif)
+
 
 ## Funcionalidades
 - Monitora a Interface `Col03` do dispositivo HID (Vendor ID: `0x1B1C`, Product ID: `0x1B2D`).
