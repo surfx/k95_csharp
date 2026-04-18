@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="scripts\**\*.*">
+    <!-- Copia os scripts apenas em Debug para desenvolvimento local -->
+    <None Update="scripts\**\*.*" Condition="'$(Configuration)' == 'Debug'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

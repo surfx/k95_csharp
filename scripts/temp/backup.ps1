@@ -1,4 +1,4 @@
-[Console]::InputEncoding  = [System.Text.Encoding]::UTF8
+﻿[Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Clear-Host
 
@@ -32,7 +32,7 @@ if (Test-Path $archivePath) { Remove-Item $archivePath -Force }
 
 foreach ($item in $itemsToBackup) {
     $fullPath = Join-Path $sourceBase $item
-    
+
     if (Test-Path $fullPath) {
         Write-Host "Adicionando $item ao arquivo..." -ForegroundColor Yellow
         # Comando: a (add), -p (password), -y (yes to all)

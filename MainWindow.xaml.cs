@@ -222,10 +222,8 @@ namespace K95Controller
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     CreateNoWindow = true,
-                    // No Windows BR, o PowerShell fala CP1252 por padrão no console.
-                    // O .NET captura isso corretamente com Encoding.Default.
-                    StandardOutputEncoding = System.Text.Encoding.Default,
-                    StandardErrorEncoding = System.Text.Encoding.Default
+                    StandardOutputEncoding = System.Text.Encoding.UTF8,
+                    StandardErrorEncoding = System.Text.Encoding.UTF8
                 };
 
                 Process? process = new Process { StartInfo = psi, EnableRaisingEvents = true };
