@@ -19,6 +19,16 @@ namespace K95Controller
         private CancellationTokenSource? _cts;
         private HidStream? _stream;
 
+        public class ConfigData
+        {
+            public Dictionary<string, string> Scripts { get; set; } = new();
+            public double? Left { get; set; }
+            public double? Top { get; set; }
+            public double? Width { get; set; }
+            public double? Height { get; set; }
+            public WindowState WindowState { get; set; } = WindowState.Normal;
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,15 +43,23 @@ namespace K95Controller
                 try
                 {
                     var json = File.ReadAllText(ConfigFilePath);
-                    var config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    var config = JsonConvert.DeserializeObject<ConfigData>(json);
                     if (config != null)
                     {
-                        if (config.ContainsKey("G1")) TxtG1.Text = config["G1"];
-                        if (config.ContainsKey("G2")) TxtG2.Text = config["G2"];
-                        if (config.ContainsKey("G3")) TxtG3.Text = config["G3"];
-                        if (config.ContainsKey("G4")) TxtG4.Text = config["G4"];
-                        if (config.ContainsKey("G5")) TxtG5.Text = config["G5"];
-                        if (config.ContainsKey("G6")) TxtG6.Text = config["G6"];
+                        // Restore Scripts
+                        if (config.Scripts.ContainsKey("G1")) TxtG1.Text = config.Scripts["G1"];
+                        if (config.Scripts.ContainsKey("G2")) TxtG2.Text = config.Scripts["G2"];
+                        if (config.Scripts.ContainsKey("G3")) TxtG3.Text = config.Scripts["G3"];
+                        if (config.Scripts.ContainsKey("G4")) TxtG4.Text = config.Scripts["G4"];
+                        if (config.Scripts.ContainsKey("G5")) TxtG5.Text = config.Scripts["G5"];
+                        if (config.Scripts.ContainsKey("G6")) TxtG6.Text = config.Scripts["G6"];
+
+                        // Restore Window Position
+                        if (config.Left.HasValue) this.Left = config.Left.Value;
+                        if (config.Top.HasValue) this.Top = config.Top.Value;
+                        if (config.Width.HasValue) this.Width = config.Width.Value;
+                        if (config.Height.HasValue) this.Height = config.Height.Value;
+                        this.WindowState = config.WindowState == WindowState.Minimized ? WindowState.Normal : config.WindowState;
                     }
                 }
                 catch (Exception ex)
@@ -53,15 +71,36 @@ namespace K95Controller
 
         private void SaveConfig()
         {
-            var config = new Dictionary<string, string>
+            var config = new ConfigData
             {
-                { "G1", TxtG1.Text },
-                { "G2", TxtG2.Text },
-                { "G3", TxtG3.Text },
-                { "G4", TxtG4.Text },
-                { "G5", TxtG5.Text },
-                { "G6", TxtG6.Text }
+                Scripts = new Dictionary<string, string>
+                {
+                    { "G1", TxtG1.Text },
+                    { "G2", TxtG2.Text },
+                    { "G3", TxtG3.Text },
+                    { "G4", TxtG4.Text },
+                    { "G5", TxtG5.Text },
+                    { "G6", TxtG6.Text }
+                }
             };
+
+            // Save Window Position
+            if (this.WindowState == WindowState.Normal)
+            {
+                config.Left = this.Left;
+                config.Top = this.Top;
+                config.Width = this.Width;
+                config.Height = this.Height;
+            }
+            else
+            {
+                config.Left = this.RestoreBounds.Left;
+                config.Top = this.RestoreBounds.Top;
+                config.Width = this.RestoreBounds.Width;
+                config.Height = this.RestoreBounds.Height;
+            }
+            config.WindowState = this.WindowState;
+
             File.WriteAllText(ConfigFilePath, JsonConvert.SerializeObject(config, Formatting.Indented));
         }
 
@@ -255,6 +294,7 @@ namespace K95Controller
         }
         protected override void OnClosed(EventArgs e)
         {
+            SaveConfig();
             _cts?.Cancel();
             _stream?.Dispose();
             base.OnClosed(e);
