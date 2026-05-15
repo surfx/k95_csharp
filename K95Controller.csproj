@@ -6,11 +6,17 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>assets\icons8-game-16.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="HidSharp" Version="2.6.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\k95_csharp.png" />
+    <Resource Include="assets\icons8-game-16.ico" />
   </ItemGroup>
 
   <ItemGroup>
