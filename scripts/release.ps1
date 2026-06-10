@@ -17,7 +17,26 @@ if (!(Test-Path $projectFile)) {
 # 2. Limpa a pasta de publish antiga
 if (Test-Path $publishDir) {
     Write-Host "Limpando pasta de release antiga..." -ForegroundColor Gray
-    Remove-Item -Path $publishDir -Recurse -Force
+    
+    $retryCount = 0
+    $maxRetries = 3
+    $deleted = $false
+
+    while (-not $deleted -and $retryCount -lt $maxRetries) {
+        try {
+            Remove-Item -Path $publishDir -Recurse -Force -ErrorAction Stop
+            $deleted = $true
+        } catch {
+            $retryCount++
+            if ($retryCount -lt $maxRetries) {
+                Write-Host "Tentando limpar novamente ($retryCount/$maxRetries)..." -ForegroundColor DarkYellow
+                Start-Sleep -Seconds 1
+            } else {
+                Write-Host "Erro: Não foi possível limpar a pasta $publishDir. Verifique se o arquivo está aberto em outro programa." -ForegroundColor Red
+                # Não interrompe o script, tenta o dotnet publish mesmo assim (ele pode sobrescrever)
+            }
+        }
+    }
 }
 
 # 3. Executa o Publish

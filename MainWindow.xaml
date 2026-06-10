@@ -16,8 +16,8 @@
         <Color x:Key="BackgroundColor">#161A22</Color>
         <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
         
-        <LinearGradientBrush x:Key="TitleBarGradient" StartPoint="0,1" EndPoint="1,0">
-            <GradientStop Color="#008080" Offset="0.0"/>
+        <LinearGradientBrush x:Key="TitleBarGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Color="#3A4659" Offset="0.0"/>
             <GradientStop Color="#161A22" Offset="1.0"/>
         </LinearGradientBrush>
         

@@ -30,16 +30,24 @@ Write-Host "Iniciando backup em $archivePath..." -ForegroundColor Cyan
 # Remove o backup antigo se existir para criar um do zero
 if (Test-Path $archivePath) { Remove-Item $archivePath -Force }
 
+# Coleta todos os itens que existem de fato
+$existingItems = @()
 foreach ($item in $itemsToBackup) {
     $fullPath = Join-Path $sourceBase $item
-
     if (Test-Path $fullPath) {
-        Write-Host "Adicionando $item ao arquivo..." -ForegroundColor Yellow
-        # Comando: a (add), -p (password), -y (yes to all)
-        & $sevenZipExe a "$archivePath" "$fullPath" "-p$password" -y
+        $existingItems += "`"$fullPath`""
     } else {
         Write-Host "Aviso: Item $item não encontrado, pulando..." -ForegroundColor Gray
     }
+}
+
+if ($existingItems.Count -gt 0) {
+    Write-Host "Comprimindo $($existingItems.Count) itens..." -ForegroundColor Yellow
+    # Executa o 7-Zip uma única vez com todos os itens
+    $itemsArg = $existingItems -join " "
+    Invoke-Expression "& `"$sevenZipExe`" a `"$archivePath`" $itemsArg -p$password -y"
+} else {
+    Write-Host "Erro: Nenhum item encontrado para backup." -ForegroundColor Red
 }
 
 Write-Host "`nBackup concluído com sucesso!" -ForegroundColor Green
