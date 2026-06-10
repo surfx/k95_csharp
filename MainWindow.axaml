@@ -1,0 +1,172 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="K95Controller.MainWindow"
+        Title="K95 G-Keys Controller" Height="700" Width="900" 
+        MinWidth="500" MinHeight="500"
+        Background="Transparent"
+        TransparencyLevelHint="None"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Icon="avares://K95Controller/assets/icons8-game-16.ico"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Inter, Microsoft YaHei, Segoe UI, sans-serif">
+    
+    <Window.Resources>
+        <!-- Palette: Deep Dark Blue / Indigo Professional -->
+        <Color x:Key="BackgroundColor">#0F1218</Color>
+        <Color x:Key="SurfaceColor">#161B22</Color>
+        <Color x:Key="BorderColor">#2A3444</Color>
+        <Color x:Key="AccentColor">#4F46E5</Color> <!-- Indigo -->
+        <Color x:Key="TextPrimary">#F1F5F9</Color>
+        <Color x:Key="TextSecondary">#94A3B8</Color>
+
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+        <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextPrimary}"/>
+        <SolidColorBrush x:Key="MutedTextBrush" Color="{StaticResource TextSecondary}"/>
+        
+        <LinearGradientBrush x:Key="TitleBarGradient" StartPoint="50%,0%" EndPoint="50%,100%">
+            <GradientStop Color="#1F2937" Offset="0.0"/>
+            <GradientStop Color="#0F1218" Offset="1.0"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="Label">
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#0A0C10"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+        </Style>
+        
+        <Style Selector="HeaderedContentControl">
+             <Setter Property="Template">
+                <ControlTemplate>
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{TemplateBinding Header}" FontSize="11" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" LetterSpacing="1"/>
+                        <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="16">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </Border>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </Window.Styles>
+
+    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True" Background="{StaticResource BackgroundBrush}">
+        <Grid RowDefinitions="40,*">
+            <!-- Custom Title Bar -->
+            <Grid Grid.Row="0" Background="{StaticResource TitleBarGradient}" PointerPressed="OnTitleBarPointerPressed">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                    <Image Source="avares://K95Controller/assets/icons8-game-16.ico" Width="18" Height="18" Margin="0,0,10,0"/>
+                    <TextBlock Text="K95 G-KEYS MANAGER" VerticalAlignment="Center" FontSize="11" FontWeight="Heavy" Foreground="White" LetterSpacing="1.5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Name="BtnMinimize" Content="–" Width="46" Height="40" Background="Transparent" BorderThickness="0" CornerRadius="0" Click="BtnMinimize_Click"/>
+                    <Button Name="BtnClose" Content="✕" Width="46" Height="40" Background="Transparent" BorderThickness="0" CornerRadius="0" Click="BtnClose_Click">
+                        <Button.Styles>
+                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="#EF4444"/>
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Main Content Area -->
+            <Grid Grid.Row="1" Margin="20" RowDefinitions="Auto,*,Auto">
+                
+                <!-- 1. Logs Header -->
+                <DockPanel Grid.Row="0" Margin="0,0,0,10">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="LOGS DE EXECUÇÃO" FontSize="11" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" LetterSpacing="1"/>
+                        <TextBlock Text="Monitoramento em tempo real do hardware" FontSize="12" Foreground="{StaticResource MutedTextBrush}"/>
+                    </StackPanel>
+                    <Button Content="Limpar Terminal" Click="ClearLogs_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="11" Padding="10,4"/>
+                </DockPanel>
+
+                <!-- 2. Logs TextBox (Now expanding in the middle) -->
+                <TextBox Name="TxtLog" Grid.Row="1" IsReadOnly="True" 
+                         Background="#05070A" Foreground="#10B981" 
+                         FontFamily="Cascadia Code, Consolas, monospace" FontSize="12"
+                         AcceptsReturn="True" TextWrapping="Wrap" BorderBrush="{StaticResource BorderBrush}" Padding="12"
+                         Margin="0,0,0,20"/>
+
+                <!-- 3. Configuration (Now at the bottom) -->
+                <HeaderedContentControl Header="CONFIGURAÇÃO DE ATALHOS" Grid.Row="2">
+                    <Grid ColumnDefinitions="*,20,*">
+                        <!-- Column 1 (G1-G3) -->
+                        <StackPanel Grid.Column="0" Spacing="10">
+                            <Grid ColumnDefinitions="35,*,40">
+                                <Label Content="G1" Grid.Column="0"/>
+                                <TextBox Name="TxtG1" Grid.Column="1" Watermark="Caminho do script..."/>
+                                <Button Name="BtnG1" Content="..." Grid.Column="2" Click="BrowseScript_Click" Tag="TxtG1" Margin="5,0,0,0"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="35,*,40">
+                                <Label Content="G2" Grid.Column="0"/>
+                                <TextBox Name="TxtG2" Grid.Column="1" Watermark="Caminho do script..."/>
+                                <Button Name="BtnG2" Content="..." Grid.Column="2" Click="BrowseScript_Click" Tag="TxtG2" Margin="5,0,0,0"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="35,*,40">
+                                <Label Content="G3" Grid.Column="0"/>
+                                <TextBox Name="TxtG3" Grid.Column="1" Watermark="Caminho do script..."/>
+                                <Button Name="BtnG3" Content="..." Grid.Column="2" Click="BrowseScript_Click" Tag="TxtG3" Margin="5,0,0,0"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Column 2 (G4-G6) -->
+                        <StackPanel Grid.Column="2" Spacing="10">
+                            <Grid ColumnDefinitions="35,*,40">
+                                <Label Content="G4" Grid.Column="0"/>
+                                <TextBox Name="TxtG4" Grid.Column="1" Watermark="Caminho do script..."/>
+                                <Button Name="BtnG4" Content="..." Grid.Column="2" Click="BrowseScript_Click" Tag="TxtG4" Margin="5,0,0,0"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="35,*,40">
+                                <Label Content="G5" Grid.Column="0"/>
+                                <TextBox Name="TxtG5" Grid.Column="1" Watermark="Caminho do script..."/>
+                                <Button Name="BtnG5" Content="..." Grid.Column="2" Click="BrowseScript_Click" Tag="TxtG5" Margin="5,0,0,0"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="35,*,40">
+                                <Label Content="G6" Grid.Column="0"/>
+                                <TextBox Name="TxtG6" Grid.Column="1" Watermark="Caminho do script..."/>
+                                <Button Name="BtnG6" Content="..." Grid.Column="2" Click="BrowseScript_Click" Tag="TxtG6" Margin="5,0,0,0"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </HeaderedContentControl>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

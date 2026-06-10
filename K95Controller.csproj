@@ -2,25 +2,29 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>assets\icons8-game-16.ico</ApplicationIcon>
+    <BuiltInPrimaryFontFamily>Inter</BuiltInPrimaryFontFamily>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.1.0" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="HidSharp" Version="2.6.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="assets\k95_csharp.png" />
-    <Resource Include="assets\icons8-game-16.ico" />
+    <AvaloniaResource Include="assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Copia os scripts apenas em Debug para desenvolvimento local -->
     <None Update="scripts\**\*.*" Condition="'$(Configuration)' == 'Debug'">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
